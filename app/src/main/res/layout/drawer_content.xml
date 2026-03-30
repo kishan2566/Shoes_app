@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:background="@color/drawer_background"
+    android:padding="30dp">
+
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="40dp"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Hey, 👋"
+        android:textColor="@color/text_grey"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivProfile" />
+
+    <TextView
+        android:id="@+id/tvProfileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Alisson Becker"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHey" />
+
+    <!-- Menu Items -->
+    <LinearLayout
+        android:id="@+id/menuLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/tvProfileName">
+
+        <TextView
+            android:id="@+id/menu_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_profile"
+            android:drawablePadding="16dp"
+            android:paddingVertical="12dp"
+            android:text="Profile"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableTint="@color/white" />
+
+        <TextView
+            android:id="@+id/menu_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_home"
+            android:drawablePadding="16dp"
+            android:paddingVertical="12dp"
+            android:text="Home Page"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableTint="@color/white" />
+
+        <TextView
+            android:id="@+id/menu_cart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_bag"
+            android:drawablePadding="16dp"
+            android:paddingVertical="12dp"
+            android:text="My Cart"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableTint="@color/white" />
+
+        <TextView
+            android:id="@+id/menu_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_heart"
+            android:drawablePadding="16dp"
+            android:paddingVertical="12dp"
+            android:text="Favorite"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableTint="@color/white" />
+
+        <TextView
+            android:id="@+id/menu_orders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@android:drawable/ic_menu_send"
+            android:drawablePadding="16dp"
+            android:paddingVertical="12dp"
+            android:text="Orders"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableTint="@color/white" />
+
+        <TextView
+            android:id="@+id/menu_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_notification"
+            android:drawablePadding="16dp"
+            android:paddingVertical="12dp"
+            android:text="Notifications"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableTint="@color/white" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="150dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="30dp"
+        android:alpha="0.2"
+        android:background="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menuLayout" />
+
+    <TextView
+        android:id="@+id/menu_signout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:drawableStart="@android:drawable/ic_lock_power_off"
+        android:drawablePadding="16dp"
+        android:paddingVertical="12dp"
+        android:text="Sign Out"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:drawableTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
