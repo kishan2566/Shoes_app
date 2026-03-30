@@ -2,8 +2,12 @@ package com.example.shoes_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -15,6 +19,16 @@ class NotificationsActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
             finish()
+        }
+
+        // Fix: Clear All button logic
+        val tvClearAll = findViewById<TextView>(R.id.tvClearAll)
+        val notificationsContainer = findViewById<LinearLayout>(R.id.notificationsContainer)
+
+        tvClearAll.setOnClickListener {
+            // Since these are static/dummy notifications for now, we just hide them
+            notificationsContainer.visibility = View.GONE
+            Toast.makeText(this, "Notifications cleared", Toast.LENGTH_SHORT).show()
         }
 
         // Setup Bottom Nav

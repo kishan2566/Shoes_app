@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Forced Light Colors even in Dark Mode -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_light">#F8F9FA</color>
+    <color name="text_dark">#1E1E1E</color>
+    <color name="text_grey">#707B81</color>
+    <color name="input_background">#F7F7F9</color>
+    <color name="light_grey">#E9EDEF</color>
+</resources>

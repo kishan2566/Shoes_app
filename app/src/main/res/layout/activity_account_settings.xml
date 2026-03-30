@@ -201,27 +201,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- Switch: Face ID -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Enable Face ID For Log In"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true" />
-            </RelativeLayout>
-
             <!-- Switch: Push Notifications -->
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -237,11 +216,11 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swPushNotif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:checked="true"
                     app:thumbTint="@color/primary_blue"
                     app:trackTint="@color/primary_blue" />
             </RelativeLayout>
@@ -261,6 +240,7 @@
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -268,27 +248,6 @@
                     android:checked="true"
                     app:thumbTint="@color/primary_blue"
                     app:trackTint="@color/primary_blue" />
-            </RelativeLayout>
-
-            <!-- Switch: Dark Mode -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Dark Mode"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true" />
             </RelativeLayout>
 
         </LinearLayout>

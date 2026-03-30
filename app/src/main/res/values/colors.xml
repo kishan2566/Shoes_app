@@ -4,10 +4,26 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary_blue">#67A0E1</color>
     <color name="background_light">#F8F9FA</color>
-    <color name="text_dark">#2B2B2B</color>
+    <color name="text_dark">#1E1E1E</color>
     <color name="text_grey">#707B81</color>
     <color name="input_background">#F7F7F9</color>
     <color name="accent_red">#FF4B4B</color>
     <color name="light_grey">#E9EDEF</color>
     <color name="drawer_background">#1A2530</color>
+    <color name="text_hint">#565454</color>
+    <!-- Admin Dashboard Colors -->
+    <color name="admin_primary">#9C27B0</color>
+    <color name="admin_revenue_bg">#F3E5F5</color>
+    <color name="admin_orders_bg">#E3F2FD</color>
+    <color name="admin_users_bg">#E8F5E9</color>
+    <color name="admin_providers_bg">#FFF3E0</color>
+    
+    <color name="status_pending">#FFF9C4</color>
+    <color name="status_pending_text">#FBC02D</color>
+    <color name="status_confirmed">#E3F2FD</color>
+    <color name="status_confirmed_text">#1976D2</color>
+    <color name="status_completed">#E8F5E9</color>
+    <color name="status_completed_text">#388E3C</color>
+    <color name="status_cancelled">#FFEBEE</color>
+    <color name="status_cancelled_text">#D32F2F</color>
 </resources>

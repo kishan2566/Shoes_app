@@ -1,9 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Shoes_app" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Shoes_app" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
     <style name="Theme.Shoes_app" parent="Base.Theme.Shoes_app" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Background color of the splash screen -->
+        <item name="windowSplashScreenBackground">@color/primary_blue</item>
+        
+        <!-- This is your main logo/image in the center -->
+        <!-- Replace @drawable/ic_bag with your actual logo file name -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        
+        <!-- Duration the splash screen icon is displayed (up to 1000ms) -->
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        
+        <!-- Theme to use after splash screen is done -->
+        <item name="postSplashScreenTheme">@style/Theme.Shoes_app</item>
+    </style>
+
+    <style name="CircleImage" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

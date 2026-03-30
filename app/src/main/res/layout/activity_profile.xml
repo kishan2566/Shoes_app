@@ -33,21 +33,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/btnBack" />
 
-    <ImageView
-        android:id="@+id/btnEdit"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="20dp"
-        android:src="@android:drawable/ic_menu_edit"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle"
-        app:tint="@color/primary_blue" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavInclude"
+        app:layout_constraintBottom_toTopOf="@id/btnSave"
         app:layout_constraintTop_toBottomOf="@id/btnBack">
 
         <LinearLayout
@@ -93,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Alisson Becker"
+                android:text="User Name"
                 android:textColor="@color/text_dark"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -119,7 +108,7 @@
                     android:layout_height="54dp"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/edit_text_bg"
-                    android:hint="Alisson Becker"
+                    android:hint="Your Name"
                     android:paddingHorizontal="16dp"
                     android:textColor="@color/text_dark"
                     android:textSize="14sp" />
@@ -139,7 +128,7 @@
                     android:layout_height="54dp"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/edit_text_bg"
-                    android:hint="alissonbecker@gmail.com"
+                    android:hint="yourname@gmail.com"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="16dp"
                     android:textColor="@color/text_dark"
@@ -169,12 +158,17 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Reusable Bottom Nav -->
-    <include
-        android:id="@+id/bottomNavInclude"
-        layout="@layout/bottom_nav"
+    <Button
+        android:id="@+id/btnSave"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/button_primary_bg"
+        android:text="Save Changes"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
