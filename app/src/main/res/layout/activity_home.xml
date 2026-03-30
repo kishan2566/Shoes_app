@@ -79,6 +79,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!-- App Title -->
+                <TextView
+                    android:id="@+id/tvAppTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Shoes Selling"
+                    android:textColor="@color/text_dark"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
                 <!-- Search Bar -->
                 <EditText
                     android:id="@+id/etSearch"
