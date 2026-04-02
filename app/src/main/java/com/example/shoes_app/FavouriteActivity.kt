@@ -11,13 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.*
 
 class FavouriteActivity : AppCompatActivity() {
 
     private lateinit var adapter: FavouriteProductAdapter
     private val favouriteList = mutableListOf<Product>()
-    private lateinit var database: DatabaseReference
     private lateinit var tvNoResults: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,16 +30,10 @@ class FavouriteActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val userId = sharedPref.getString("userId", null)
 
-        if (userId != null) {
-            adapter = FavouriteProductAdapter(favouriteList, this, userId)
-            rvFavourite.adapter = adapter
+        adapter = FavouriteProductAdapter(favouriteList, this, userId ?: "")
+        rvFavourite.adapter = adapter
 
-            database = FirebaseDatabase.getInstance().getReference("favorites").child(userId)
-            fetchFavourites()
-        } else {
-            tvNoResults.text = "Please sign in to see your favourites"
-            tvNoResults.visibility = View.VISIBLE
-        }
+        loadFavourites()
 
         // Back button
         findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
@@ -77,19 +69,23 @@ class FavouriteActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchFavourites() {
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                favouriteList.clear()
-                for (snap in snapshot.children) {
-                    val product = snap.getValue(Product::class.java)
-                    if (product != null) favouriteList.add(product)
-                }
-                adapter.updateProducts(favouriteList)
-                tvNoResults.visibility = if (favouriteList.isEmpty()) View.VISIBLE else View.GONE
-            }
+    override fun onResume() {
+        super.onResume()
+        // Refresh list whenever we come back (in case user toggled a favourite)
+        loadFavourites()
+    }
 
-            override fun onCancelled(error: DatabaseError) {}
-        })
+    private fun loadFavourites() {
+        val favPrefs = getSharedPreferences("Favourites", Context.MODE_PRIVATE)
+        val favIds = favPrefs.getStringSet("fav_ids", emptySet()) ?: emptySet()
+
+        favouriteList.clear()
+        for (id in favIds) {
+            val product = ProductRepository.getProductById(id)
+            if (product != null) favouriteList.add(product)
+        }
+
+        adapter.updateProducts(favouriteList)
+        tvNoResults.visibility = if (favouriteList.isEmpty()) View.VISIBLE else View.GONE
     }
 }

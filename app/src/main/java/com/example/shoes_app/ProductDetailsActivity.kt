@@ -12,8 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import com.bumptech.glide.Glide
-import com.google.firebase.database.*
+
 
 class ProductDetailsActivity : AppCompatActivity() {
     private var product: Product? = null
@@ -65,35 +66,31 @@ class ProductDetailsActivity : AppCompatActivity() {
         // Setup size selection
         setupSizeSelection(sizeLayout)
 
-        val database = FirebaseDatabase.getInstance().getReference("products").child(productId!!)
-        database.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                try {
-                    product = snapshot.getValue(Product::class.java)
-                    product?.let {
-                        tvName.text = it.name ?: "Unknown Shoe"
-                        val priceText = "₹${it.price ?: 0.0}"
-                        tvPrice.text = priceText
-                        tvPriceBottom.text = priceText
-                        tvDescription.text = it.description ?: "No description available."
+        // Load product from local repository
+        val foundProduct = ProductRepository.getProductById(productId!!)
+        if (foundProduct == null) {
+            Toast.makeText(this, "Product not found", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+        product = foundProduct
+        product?.let {
+            tvName.text = it.name ?: "Unknown Shoe"
+            val priceText = "₹${it.price ?: 0.0}"
+            tvPrice.text = priceText
+            tvPriceBottom.text = priceText
+            tvDescription.text = it.description ?: "No description available."
 
-                        val imageUrl = it.imageUrl ?: (if (!it.imageUrls.isNullOrEmpty()) it.imageUrls!![0] else "")
+            val imageUrl = it.imageUrl ?: (if (!it.imageUrls.isNullOrEmpty()) it.imageUrls!![0] else "")
 
-                        Glide.with(this@ProductDetailsActivity)
-                            .load(imageUrl)
-                            .placeholder(android.R.drawable.ic_menu_report_image)
-                            .error(android.R.drawable.ic_menu_report_image)
-                            .into(ivProduct)
+            Glide.with(this@ProductDetailsActivity)
+                .load(imageUrl)
+                .placeholder(android.R.drawable.ic_menu_report_image)
+                .error(android.R.drawable.ic_menu_report_image)
+                .into(ivProduct)
 
-                        // If product has gallery images, populate them
-                        setupGallery(galleryLayout, it, ivProduct)
-                    }
-                } catch (e: Exception) {
-                    Toast.makeText(this@ProductDetailsActivity, "Error loading product data", Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+            setupGallery(galleryLayout, it, ivProduct)
+        }
 
         btnAddToCart.setOnClickListener {
             if (selectedSize == null) {
@@ -105,78 +102,41 @@ class ProductDetailsActivity : AppCompatActivity() {
     }
 
     private fun checkFavouriteStatus() {
-        val uid = userId ?: return
         val pid = productId ?: return
-        FirebaseDatabase.getInstance()
-            .getReference("favorites")
-            .child(uid)
-            .child(pid)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    isFavourite = snapshot.exists()
-                    updateFavouriteIcon()
-                }
-                override fun onCancelled(error: DatabaseError) {}
-            })
+        val favPrefs = getSharedPreferences("Favourites", Context.MODE_PRIVATE)
+        val favIds = favPrefs.getStringSet("fav_ids", emptySet()) ?: emptySet()
+        isFavourite = favIds.contains(pid)
+        updateFavouriteIcon()
     }
 
     private fun toggleFavourite() {
-        val uid = userId
-        val pid = productId
-        val prod = product
+        val pid = productId ?: return
 
-        if (uid == null) {
-            Toast.makeText(this, "Please sign in first", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (pid == null || prod == null) return
-
-        val favRef = FirebaseDatabase.getInstance()
-            .getReference("favorites")
-            .child(uid)
-            .child(pid)
+        val favPrefs = getSharedPreferences("Favourites", Context.MODE_PRIVATE)
+        val favIds = favPrefs.getStringSet("fav_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
 
         if (isFavourite) {
-            // Remove from favourites
-            favRef.removeValue()
-                .addOnSuccessListener {
-                    isFavourite = false
-                    updateFavouriteIcon()
-                    Toast.makeText(this, "Removed from favourites", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to update favourites", Toast.LENGTH_SHORT).show()
-                }
+            favIds.remove(pid)
+            favPrefs.edit().putStringSet("fav_ids", favIds).apply()
+            isFavourite = false
+            updateFavouriteIcon()
+            Toast.makeText(this, "Removed from favourites", Toast.LENGTH_SHORT).show()
         } else {
-            // Add to favourites — store the full product object
-            val favItem = HashMap<String, Any>()
-            favItem["id"] = prod.id ?: ""
-            favItem["name"] = prod.name ?: ""
-            favItem["price"] = prod.price ?: 0.0
-            favItem["imageUrl"] = prod.imageUrl ?: ""
-            favItem["category"] = prod.category ?: ""
-            favItem["description"] = prod.description ?: ""
-            favItem["brand"] = prod.brand ?: ""
-
-            favRef.setValue(favItem)
-                .addOnSuccessListener {
-                    isFavourite = true
-                    updateFavouriteIcon()
-                    Toast.makeText(this, "Added to favourites ❤️", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to update favourites", Toast.LENGTH_SHORT).show()
-                }
+            favIds.add(pid)
+            favPrefs.edit().putStringSet("fav_ids", favIds).apply()
+            isFavourite = true
+            updateFavouriteIcon()
+            Toast.makeText(this, "Added to favourites ❤️", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun updateFavouriteIcon() {
         if (isFavourite) {
             btnFavorite.setImageResource(R.drawable.ic_heart_filled)
-            btnFavorite.clearColorFilter()
+            ImageViewCompat.setImageTintList(btnFavorite, null)
         } else {
             btnFavorite.setImageResource(R.drawable.ic_heart)
-            btnFavorite.setColorFilter(ContextCompat.getColor(this, R.color.text_grey))
+            ImageViewCompat.setImageTintList(btnFavorite, null)
         }
     }
 

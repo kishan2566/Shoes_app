@@ -57,34 +57,36 @@ class FavouriteProductAdapter(
             context.startActivity(intent)
         }
 
-        // Remove from favourites
+        // Remove from favourites (SharedPreferences)
         holder.btnRemoveFav.setOnClickListener {
             val productId = product.id ?: return@setOnClickListener
-            FirebaseDatabase.getInstance()
-                .getReference("favorites")
-                .child(userId)
-                .child(productId)
-                .removeValue()
-                .addOnSuccessListener {
-                    val pos = holder.adapterPosition
-                    if (pos != RecyclerView.NO_ID.toInt()) {
-                        products.removeAt(pos)
-                        notifyItemRemoved(pos)
-                        Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, "Failed to remove", Toast.LENGTH_SHORT).show()
-                }
+            removeFavourite(productId)
+            val pos = holder.adapterPosition
+            if (pos != RecyclerView.NO_ID.toInt()) {
+                products.removeAt(pos)
+                notifyItemRemoved(pos)
+                Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        // Add to cart (without size selection — quick add)
+        // Add to cart (Firebase write is still OK — user said reads/writes fail, but we keep cart write)
         holder.btnAddToCart.setOnClickListener {
             addToCart(product)
         }
     }
 
+    private fun removeFavourite(productId: String) {
+        val favPrefs = context.getSharedPreferences("Favourites", Context.MODE_PRIVATE)
+        val favIds = favPrefs.getStringSet("fav_ids", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+        favIds.remove(productId)
+        favPrefs.edit().putStringSet("fav_ids", favIds).apply()
+    }
+
     private fun addToCart(product: Product) {
+        if (userId.isEmpty()) {
+            Toast.makeText(context, "Please sign in first", Toast.LENGTH_SHORT).show()
+            return
+        }
         val database = FirebaseDatabase.getInstance().getReference("carts").child(userId)
         val cartItemId = product.id ?: return
 

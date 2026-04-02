@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.*
+
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var etSearch: EditText
@@ -49,19 +49,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun fetchProducts() {
-        val database = FirebaseDatabase.getInstance().getReference("products")
-        database.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                allProducts.clear()
-                for (productSnapshot in snapshot.children) {
-                    val product = productSnapshot.getValue(Product::class.java)
-                    if (product != null) {
-                        allProducts.add(product)
-                    }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+        allProducts.clear()
+        allProducts.addAll(ProductRepository.products)
     }
 
     private fun filter(query: String) {

@@ -10,42 +10,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 
 class SearchProductAdapter(
     private var products: List<Product>,
     private val context: Context
 ) : RecyclerView.Adapter<SearchProductAdapter.ViewHolder>() {
 
-    private val sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-    private val userId: String? get() = sharedPref.getString("userId", null)
-    private val favouritedIds = mutableSetOf<String>()
-
-    init {
-        loadFavouriteIds()
-    }
-
-    private fun loadFavouriteIds() {
-        val uid = userId ?: return
-        FirebaseDatabase.getInstance()
-            .getReference("favorites")
-            .child(uid)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    favouritedIds.clear()
-                    for (snap in snapshot.children) {
-                        snap.key?.let { favouritedIds.add(it) }
-                    }
-                    notifyDataSetChanged()
-                }
-                override fun onCancelled(error: DatabaseError) {}
-            })
-    }
+    // Favourites backed by SharedPreferences — no Firebase reads needed
+    private val favPrefs = context.getSharedPreferences("Favourites", Context.MODE_PRIVATE)
+    private val favouritedIds: MutableSet<String>
+        get() = favPrefs.getStringSet("fav_ids", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val ivProduct: ImageView = view.findViewById(R.id.ivProduct)
@@ -97,50 +76,52 @@ class SearchProductAdapter(
     private fun updateFavouriteIcon(btn: ImageButton, productId: String?) {
         if (productId != null && favouritedIds.contains(productId)) {
             btn.setImageResource(R.drawable.ic_heart_filled)
-            btn.clearColorFilter()
+            ImageViewCompat.setImageTintList(btn, null)
         } else {
             btn.setImageResource(R.drawable.ic_heart)
-            btn.setColorFilter(ContextCompat.getColor(context, R.color.text_grey))
+            ImageViewCompat.setImageTintList(btn, null)
         }
     }
 
     private fun toggleFavourite(product: Product, btn: ImageButton) {
-        val uid = userId
-        if (uid == null) {
-            Toast.makeText(context, "Please sign in first", Toast.LENGTH_SHORT).show()
-            return
-        }
         val pid = product.id ?: return
-        val favRef = FirebaseDatabase.getInstance()
-            .getReference("favorites")
-            .child(uid)
-            .child(pid)
+        val currentIds = favouritedIds
 
-        if (favouritedIds.contains(pid)) {
-            favRef.removeValue()
-                .addOnSuccessListener {
-                    favouritedIds.remove(pid)
-                    updateFavouriteIcon(btn, pid)
-                    Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show()
-                }
+        if (currentIds.contains(pid)) {
+            currentIds.remove(pid)
+            favPrefs.edit().putStringSet("fav_ids", currentIds).apply()
+            updateFavouriteIcon(btn, pid)
+            animateHeart(btn)
+            Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show()
         } else {
-            val favItem = HashMap<String, Any>()
-            favItem["id"] = product.id ?: ""
-            favItem["name"] = product.name ?: ""
-            favItem["price"] = product.price ?: 0.0
-            favItem["imageUrl"] = product.imageUrl ?: ""
-            favItem["category"] = product.category ?: ""
-            favItem["description"] = product.description ?: ""
-            favItem["brand"] = product.brand ?: ""
+            currentIds.add(pid)
+            favPrefs.edit().putStringSet("fav_ids", currentIds).apply()
+            updateFavouriteIcon(btn, pid)
+            animateHeart(btn)
+            Toast.makeText(context, "Added to favourites ❤️", Toast.LENGTH_SHORT).show()
+        }
+    }
 
-            favRef.setValue(favItem)
-                .addOnSuccessListener {
-                    favouritedIds.add(pid)
-                    updateFavouriteIcon(btn, pid)
-                    Toast.makeText(context, "Added to favourites ❤️", Toast.LENGTH_SHORT).show()
-                }
+    private fun animateHeart(btn: ImageButton) {
+        val scaleUpX = ObjectAnimator.ofFloat(btn, "scaleX", 1f, 1.4f)
+        val scaleUpY = ObjectAnimator.ofFloat(btn, "scaleY", 1f, 1.4f)
+        val scaleDownX = ObjectAnimator.ofFloat(btn, "scaleX", 1.4f, 1f)
+        val scaleDownY = ObjectAnimator.ofFloat(btn, "scaleY", 1.4f, 1f)
+        scaleUpX.duration = 120
+        scaleUpY.duration = 120
+        scaleDownX.duration = 120
+        scaleDownY.duration = 120
+        AnimatorSet().apply {
+            play(scaleUpX).with(scaleUpY)
+            play(scaleDownX).with(scaleDownY).after(scaleUpX)
+            start()
         }
     }
 
     override fun getItemCount() = products.size
+
+    fun updateProducts(newProducts: List<Product>) {
+        products = newProducts
+        notifyDataSetChanged()
+    }
 }

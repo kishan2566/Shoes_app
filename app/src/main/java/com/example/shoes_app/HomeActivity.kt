@@ -23,7 +23,10 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.*
 
 class HomeActivity : AppCompatActivity() {
@@ -205,20 +208,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun fetchProducts() {
-        val database = FirebaseDatabase.getInstance().getReference("products")
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                allProducts.clear()
-                for (productSnapshot in snapshot.children) {
-                    val product = productSnapshot.getValue(Product::class.java)
-                    if (product != null) {
-                        allProducts.add(product)
-                    }
-                }
-                filterProducts("All Shoes")
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+        allProducts.clear()
+        allProducts.addAll(ProductRepository.products)
+        filterProducts("All Shoes")
     }
 
     private fun filterProducts(category: String) {

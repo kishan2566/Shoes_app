@@ -8,11 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.*
 
 class ManageProductsActivity : AppCompatActivity() {
     private lateinit var adapter: ProductAdapter
-    private lateinit var database: DatabaseReference
     private val productList = mutableListOf<Product>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,9 +22,10 @@ class ManageProductsActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.rvProducts)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        adapter = ProductAdapter(productList, 
+        adapter = ProductAdapter(productList,
             onDeleteClick = { product ->
-                deleteProduct(product)
+                // Delete is a no-op for hardcoded products (Firebase writes not supported)
+                Toast.makeText(this, "Products are managed in code (Firebase unavailable)", Toast.LENGTH_SHORT).show()
             },
             onEditClick = { product ->
                 val intent = Intent(this, AddProductActivity::class.java)
@@ -37,38 +36,14 @@ class ManageProductsActivity : AppCompatActivity() {
         )
         recyclerView.adapter = adapter
 
+        // FAB: inform admin that products are hardcoded
         findViewById<FloatingActionButton>(R.id.fabAddProduct).setOnClickListener {
-            startActivity(Intent(this, AddProductActivity::class.java))
+            Toast.makeText(this, "Add products in ProductRepository.kt", Toast.LENGTH_LONG).show()
         }
 
-        database = FirebaseDatabase.getInstance().getReference("products")
-        fetchProducts()
-    }
-
-    private fun fetchProducts() {
-        database.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                productList.clear()
-                for (productSnapshot in snapshot.children) {
-                    val product = productSnapshot.getValue(Product::class.java)
-                    if (product != null) {
-                        productList.add(product)
-                    }
-                }
-                adapter.updateProducts(productList)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@ManageProductsActivity, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun deleteProduct(product: Product) {
-        product.id?.let { id ->
-            database.child(id).removeValue().addOnSuccessListener {
-                Toast.makeText(this, "Product removed", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // Load from local repository
+        productList.clear()
+        productList.addAll(ProductRepository.products)
+        adapter.updateProducts(productList)
     }
 }
