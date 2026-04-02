@@ -42,19 +42,22 @@
         android:padding="12dp"
         app:layout_constraintBottom_toTopOf="@id/bottomNavInclude"
         app:layout_constraintTop_toBottomOf="@id/btnBack"
-        tools:listitem="@layout/item_home_product" />
+        tools:listitem="@layout/item_favourite" />
 
     <TextView
         android:id="@+id/tvNoResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No items in wishlist"
+        android:text="❤️ No favourites yet\nTap the heart on any product to save it here!"
         android:textColor="@color/text_grey"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavInclude"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
     <!-- Reusable Bottom Nav -->
     <include

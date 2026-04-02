@@ -50,6 +50,16 @@
         app:layout_constraintTop_toBottomOf="@id/tvProductName" />
 
     <ImageButton
+        android:id="@+id/btnFavorite"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/back_button_bg"
+        android:src="@drawable/ic_heart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/text_grey" />
+
+    <ImageButton
         android:id="@+id/btnAddToCart"
         android:layout_width="32dp"
         android:layout_height="32dp"
