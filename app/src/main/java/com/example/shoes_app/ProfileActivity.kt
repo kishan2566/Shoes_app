@@ -6,12 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -30,7 +25,9 @@ class ProfileActivity : AppCompatActivity() {
     private val pickImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             imageUri = result.data?.data
-            ivProfile.setImageURI(imageUri)
+            // Immediately show the selected image
+            Glide.with(this).load(imageUri).circleCrop().into(ivProfile)
+            // Optional: Auto-upload when selected, or wait for "Save"
         }
     }
 
@@ -43,7 +40,7 @@ class ProfileActivity : AppCompatActivity() {
         etEmail = findViewById(R.id.etEmail)
         etPassword = findViewById(R.id.etPassword)
         tvProfileName = findViewById(R.id.tvProfileName)
-        ivProfile = findViewById(R.id.ivProfile)
+
         val btnSave = findViewById<Button>(R.id.btnSave)
         val profileImageContainer = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.profileImageContainer)
 
@@ -56,14 +53,14 @@ class ProfileActivity : AppCompatActivity() {
             val database = FirebaseDatabase.getInstance()
             val userRef = database.getReference("users").child(currentUserId!!)
 
-            // Load profile data
-            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            // Real-time listener for profile data (similar to your example)
+            userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.getValue(User::class.java)
                     if (user != null) {
-                        etName.setText(user.name)
-                        etEmail.setText(user.email)
-                        etPassword.setText(user.password)
+                        if (etName.text.isEmpty()) etName.setText(user.name)
+                        if (etEmail.text.isEmpty()) etEmail.setText(user.email)
+                        if (etPassword.text.isEmpty()) etPassword.setText(user.password)
                         tvProfileName.text = user.name
                         
                         if (!user.profileImageUrl.isNullOrEmpty()) {
@@ -83,7 +80,6 @@ class ProfileActivity : AppCompatActivity() {
                 pickImage.launch(intent)
             }
 
-            // Save changes
             btnSave.setOnClickListener {
                 saveProfileChanges()
             }
@@ -95,19 +91,22 @@ class ProfileActivity : AppCompatActivity() {
         val email = etEmail.text.toString().trim()
         val password = etPassword.text.toString().trim()
 
-        if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-            if (imageUri != null) {
-                uploadImageAndSaveData(name, email, password)
-            } else {
-                updateUserData(name, email, password, null)
-            }
-        } else {
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (imageUri != null) {
+            uploadImageAndSaveData(name, email, password)
+        } else {
+            updateUserData(name, email, password, null)
         }
     }
 
     private fun uploadImageAndSaveData(name: String, email: String, password: String) {
         val storageRef = FirebaseStorage.getInstance().getReference("profile_images/$currentUserId.jpg")
+        
+        Toast.makeText(this, "Uploading image...", Toast.LENGTH_SHORT).show()
         
         storageRef.putFile(imageUri!!)
             .addOnSuccessListener {
@@ -132,8 +131,8 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         userRef.updateChildren(updates).addOnSuccessListener {
-            Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show()
-            tvProfileName.text = name
+            Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+            imageUri = null // Reset selection after success
         }.addOnFailureListener {
             Toast.makeText(this, "Update failed", Toast.LENGTH_SHORT).show()
         }

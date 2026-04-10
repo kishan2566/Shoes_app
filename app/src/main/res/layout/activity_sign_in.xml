@@ -1,157 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     android:background="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+    <!-- Login Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/loginScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:text="Hello Again!"
-            android:textColor="@color/text_dark"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:padding="20dp">
 
-        <TextView
-            android:id="@+id/tvSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Welcome Back You've Been Missed!"
-            android:textColor="@color/text_grey"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:text="Hello Again!"
+                android:textColor="@color/text_dark"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/lbl_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Email Address"
-            android:textColor="@color/text_dark"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Welcome Back You've Been Missed!"
+                android:textColor="@color/text_grey"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/edit_text_bg"
-            android:hint="alissonbecker@gmail.com"
-            android:textColorHint="@color/text_hint"
-            android:inputType="textEmailAddress"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lbl_email" />
-
-        <TextView
-            android:id="@+id/lbl_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Password"
-            android:textColor="@color/text_dark"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEmail" />
-
-        <FrameLayout
-            android:id="@+id/passwordContainer"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lbl_password">
+            <TextView
+                android:id="@+id/lbl_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="Email Address"
+                android:textColor="@color/text_dark"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
 
             <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/etEmail"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/edit_text_bg"
-                android:hint="••••••••"
+                android:hint="alissonbecker@gmail.com"
                 android:textColorHint="@color/text_hint"
-                android:inputType="textPassword"
+                android:inputType="textEmailAddress"
                 android:paddingStart="16dp"
-                android:paddingEnd="50dp"
+                android:paddingEnd="16dp"
                 android:textColor="@color/text_dark"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lbl_email" />
 
-            <ImageView
-                android:id="@+id/ivPasswordToggle"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="16dp"
-                android:alpha="0.5"
-                android:src="@android:drawable/ic_menu_view" />
-        </FrameLayout>
+            <TextView
+                android:id="@+id/lbl_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Password"
+                android:textColor="@color/text_dark"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etEmail" />
 
-        <TextView
-            android:id="@+id/tvRecovery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Recovery Password"
-            android:textColor="@color/text_grey"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordContainer" />
+            <FrameLayout
+                android:id="@+id/passwordContainer"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lbl_password">
 
-        <Button
-            android:id="@+id/btnSignIn"
-            android:layout_width="0dp"
-            android:layout_height="54dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/button_primary_bg"
-            android:text="Sign In"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:backgroundTint="@null"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvRecovery" />
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/edit_text_bg"
+                    android:hint="••••••••"
+                    android:textColorHint="@color/text_hint"
+                    android:inputType="textPassword"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="50dp"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tvFooter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"
-            android:text="Don't Have An Account? Sign Up For Free"
-            android:textColor="@color/text_grey"
-            android:textSize="14sp"
+                <ImageView
+                    android:id="@+id/ivPasswordToggle"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="16dp"
+                    android:alpha="0.5"
+                    android:src="@android:drawable/ic_menu_view" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvRecovery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Recovery Password"
+                android:textColor="@color/text_grey"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/passwordContainer" />
+
+            <Button
+                android:id="@+id/btnSignIn"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button_primary_bg"
+                android:text="Sign In"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRecovery" />
+
+            <TextView
+                android:id="@+id/tvFooter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="Don't Have An Account? Sign Up For Free"
+                android:textColor="@color/text_grey"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnSignIn"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Splash/Loading Overlay -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/splashContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary_blue"
+        android:elevation="10dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/splashLogo"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@mipmap/ic_launcher_foreground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnSignIn"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4" />
+
+        <ProgressBar
+            android:id="@+id/splashProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/splashLogo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

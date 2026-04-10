@@ -32,32 +32,134 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/btnBack" />
 
-    <!-- RecyclerView for dynamic wishlist -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFavourite"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:clipToPadding="false"
-        android:padding="12dp"
         app:layout_constraintBottom_toTopOf="@id/bottomNavInclude"
-        app:layout_constraintTop_toBottomOf="@id/btnBack"
-        tools:listitem="@layout/item_favourite" />
+        app:layout_constraintTop_toBottomOf="@id/btnBack">
 
-    <TextView
-        android:id="@+id/tvNoResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="❤️ No favourites yet\nTap the heart on any product to save it here!"
-        android:textColor="@color/text_grey"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:lineSpacingExtra="4dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavInclude"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnBack" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Dynamic wishlist -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFavourite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:padding="12dp"
+                tools:listitem="@layout/item_favourite" />
+
+            <TextView
+                android:id="@+id/tvNoResults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:text="❤️ No favourites yet\nTap the heart on any product to save it here!"
+                android:textColor="@color/text_grey"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <!-- Static items section like Home Page -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Recommended for You"
+                android:textColor="@color/text_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:columnCount="2">
+
+                <!-- Recommended Item 1 -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/recommended_card_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+                        <ImageView
+                            android:id="@+id/ivRecommended1"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/shoes1" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Adidas Ultraboost"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="₹15000.0"
+                            android:textColor="@color/primary_blue"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Recommended Item 2 -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/recommended_card_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+                        <ImageView
+                            android:id="@+id/ivRecommended2"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/shoes2" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Puma RS-X"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="₹8000.0"
+                            android:textColor="@color/primary_blue"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </GridLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
     <!-- Reusable Bottom Nav -->
     <include

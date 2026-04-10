@@ -1,16 +1,19 @@
 package com.example.shoes_app
 
+import com.google.firebase.database.IgnoreExtraProperties
+
+@IgnoreExtraProperties
 data class Product(
-    val id: String? = null,
-    val name: String? = null,
-    val brand: String? = null,
-    val price: Double? = null,
-    val discount: Int? = 0,
-    val sizes: List<Int>? = null,
-    val category: String? = null,
-    val description: String? = null,
-    val imageUrls: List<String>? = null, // Support for multiple images
-    val imageUrl: String? = null,        // Main image (backward compatibility)
-    val rating: Double? = 0.0,
-    val stockQuantity: Int? = 0
+    var id: String? = null,
+    var name: String? = null,
+    var brand: String? = null,
+    var price: Double? = null,
+    var category: String? = null,
+    var description: String? = null,
+    var imageUrl: String? = null,
+    var imageUrls: List<String>? = null,
+    var discount: Int? = 0,
+    var rating: Double? = 0.0,
+    var stockQuantity: Int? = 0,
+    var reviewsCount: String? = "0"
 )

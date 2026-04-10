@@ -47,6 +47,7 @@
         <activity android:name=".ManageProductsActivity" />
         <activity android:name=".PaymentActivity" />
         <activity android:name=".UserOrdersActivity" />
+        <activity android:name=".ShippingAddressActivity" />
 
     </application>
 

@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.play.services.location)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.photoview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

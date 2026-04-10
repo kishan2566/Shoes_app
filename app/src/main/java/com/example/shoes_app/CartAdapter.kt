@@ -31,11 +31,19 @@ class CartAdapter(
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val product = cartItems[position]
         holder.tvName.text = product.name
-        holder.tvPrice.text = "$${product.price}"
+        holder.tvPrice.text = "₹${product.price}"
         
+        // Pick the best available URL
+        val imgToLoad: String? = when {
+            !product.imageUrl.isNullOrEmpty() -> product.imageUrl
+            !product.imageUrls.isNullOrEmpty() -> product.imageUrls?.get(0)
+            else -> null
+        }
+
         Glide.with(context)
-            .load(product.imageUrl)
+            .load(imgToLoad)
             .placeholder(android.R.drawable.ic_menu_report_image)
+            .error(android.R.drawable.ic_menu_report_image)
             .into(holder.ivItem)
 
         holder.btnDelete.setOnClickListener { onDeleteClick(product) }

@@ -61,42 +61,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Item: Notification Setting -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="12dp">
-
-                    <ImageView
-                        android:id="@+id/ivNotif"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_popup_reminder"
-                        app:tint="@color/text_grey" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="16dp"
-                        android:layout_toEndOf="@id/ivNotif"
-                        android:text="Notification Setting"
-                        android:textColor="@color/text_dark"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/text_grey" />
-                </RelativeLayout>
-
                 <!-- Item: Shipping Address -->
                 <RelativeLayout
+                    android:id="@+id/rowShipping"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     android:paddingVertical="12dp">
 
                     <ImageView
@@ -125,42 +97,14 @@
                         app:tint="@color/text_grey" />
                 </RelativeLayout>
 
-                <!-- Item: Payment Info -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingVertical="12dp">
-
-                    <ImageView
-                        android:id="@+id/ivPayment"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_myplaces"
-                        app:tint="@color/text_grey" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="16dp"
-                        android:layout_toEndOf="@id/ivPayment"
-                        android:text="Payment Info"
-                        android:textColor="@color/text_dark"
-                        android:textSize="16sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/text_grey" />
-                </RelativeLayout>
-
                 <!-- Item: Delete Account -->
                 <RelativeLayout
+                    android:id="@+id/rowDelete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     android:paddingVertical="12dp">
 
                     <ImageView
@@ -168,7 +112,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_menu_delete"
-                        app:tint="@color/text_grey" />
+                        app:tint="@color/accent_red" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -177,7 +121,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_toEndOf="@id/ivDelete"
                         android:text="Delete Account"
-                        android:textColor="@color/text_dark"
+                        android:textColor="@color/accent_red"
                         android:textSize="16sp" />
 
                     <ImageView
@@ -186,7 +130,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/text_grey" />
+                        app:tint="@color/accent_red" />
                 </RelativeLayout>
             </LinearLayout>
 

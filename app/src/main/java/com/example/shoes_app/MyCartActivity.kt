@@ -85,8 +85,8 @@ class MyCartActivity : AppCompatActivity() {
 
     private fun updateSummary(subtotal: Double) {
         val total = if (subtotal > 0) subtotal + shippingCost else 0.0
-        tvSubtotal.text = "$${String.format("%.2f", subtotal)}"
-        tvTotalCost.text = "$${String.format("%.2f", total)}"
+        tvSubtotal.text = "₹${String.format("%.2f", subtotal)}"
+        tvTotalCost.text = "₹${String.format("%.2f", total)}"
     }
 
     private fun removeFromCart(userId: String, product: Product) {

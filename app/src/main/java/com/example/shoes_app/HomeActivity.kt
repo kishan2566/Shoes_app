@@ -5,21 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -30,207 +26,155 @@ import com.google.firebase.database.ValueEventListener
 import java.util.*
 
 class HomeActivity : AppCompatActivity() {
-    private lateinit var popularAdapter: HomeProductAdapter
-    private lateinit var arrivalsAdapter: HomeProductAdapter
-    private lateinit var categoryAdapter: CategoryAdapter
-    private val popularList = mutableListOf<Product>()
-    private val arrivalsList = mutableListOf<Product>()
-    private val allProducts = mutableListOf<Product>()
-    private val categories = listOf("All Shoes", "Nike", "Adidas", "Puma", "Under Armour", "Jordan")
-    
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var fusedLocationClient: FusedLocationProviderClient? = null
     private lateinit var tvLocation: TextView
+    private lateinit var tvProfileName: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         tvLocation = findViewById(R.id.tvLocation)
-
+        tvProfileName = findViewById(R.id.tvProfileName)
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val btnMenu = findViewById<ImageButton>(R.id.btnMenu)
-        val btnCart = findViewById<ImageButton>(R.id.btnCart)
         val etSearch = findViewById<EditText>(R.id.etSearch)
-        val tvSeeAll = findViewById<TextView>(R.id.tvSeeAll)
-        val tvSeeAllArrivals = findViewById<TextView>(R.id.tvSeeAllArrivals)
         
-        // RecyclerViews
-        val rvCategories = findViewById<RecyclerView>(R.id.rvCategories)
-        val rvPopular = findViewById<RecyclerView>(R.id.rvPopularShoes)
-        val rvArrivals = findViewById<RecyclerView>(R.id.rvNewArrivals)
+        // Find the notification icon in the header (ivNotificationsTop)
+        val ivNotificationsBell = findViewById<ImageView>(R.id.ivNotificationsTop)
 
-        // Categories Setup
-        rvCategories.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        categoryAdapter = CategoryAdapter(categories) { category ->
-            filterProducts(category)
-        }
-        rvCategories.adapter = categoryAdapter
+        setupManualProducts()
+        setupDrawerAndNav(drawerLayout)
+        loadUserData()
 
-        rvPopular.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rvArrivals.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        popularAdapter = HomeProductAdapter(popularList, this)
-        arrivalsAdapter = HomeProductAdapter(arrivalsList, this)
-
-        rvPopular.adapter = popularAdapter
-        rvArrivals.adapter = arrivalsAdapter
-
-        // Fetch Products
-        fetchProducts()
-        
-        // Get Live Location
-        getLocation()
-
-        // Bottom Nav Icons
-        val ivHome = findViewById<ImageView>(R.id.ivHome)
-        val ivFav = findViewById<ImageView>(R.id.ivFav)
-        val fabCart = findViewById<FloatingActionButton>(R.id.fabCart)
-        val ivNotifications = findViewById<ImageView>(R.id.ivNotifications)
-        val ivProfileNav = findViewById<ImageView>(R.id.ivProfileNav)
-
-        ivHome.setColorFilter(ContextCompat.getColor(this, R.color.primary_blue))
-
-        // Drawer Menu Items
-        val menuAccount = findViewById<TextView>(R.id.menu_account)
-        val menuHome = findViewById<TextView>(R.id.menu_home)
-        val menuCart = findViewById<TextView>(R.id.menu_cart)
-        val menuFavorite = findViewById<TextView>(R.id.menu_favorite)
-        val menuOrders = findViewById<TextView>(R.id.menu_orders)
-        val menuNotifications = findViewById<TextView>(R.id.menu_notifications)
-        val menuAdmin = findViewById<TextView>(R.id.menu_admin)
-        val menuSignOut = findViewById<TextView>(R.id.menu_signout)
-        val tvDrawerName = findViewById<TextView>(R.id.tvProfileName)
-        val ivDrawerProfile = findViewById<ImageView>(R.id.ivProfile)
-
-        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val userId = sharedPref.getString("userId", null)
-
-        if (userId != null) {
-            val database = FirebaseDatabase.getInstance()
-            database.getReference("users").child(userId)
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val user = snapshot.getValue(User::class.java)
-                        if (user != null) {
-                            tvDrawerName.text = user.name
-                            menuAdmin.visibility = if (user.isAdmin) View.VISIBLE else View.GONE
-                            
-                            if (!user.profileImageUrl.isNullOrEmpty()) {
-                                Glide.with(this@HomeActivity)
-                                    .load(user.profileImageUrl)
-                                    .placeholder(android.R.drawable.ic_menu_gallery)
-                                    .circleCrop()
-                                    .into(ivDrawerProfile)
-                                
-                                Glide.with(this@HomeActivity)
-                                    .load(user.profileImageUrl)
-                                    .placeholder(R.drawable.ic_profile)
-                                    .circleCrop()
-                                    .into(ivProfileNav)
-                            }
-                        }
-                    }
-                    override fun onCancelled(error: DatabaseError) {}
-                })
+        try {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            getLocation()
+        } catch (e: Exception) {
+            Log.e("HomeActivity", "Location setup failed", e)
+            tvLocation.text = getString(R.string.default_location)
         }
 
         btnMenu.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
         etSearch.setOnClickListener { startActivity(Intent(this, SearchActivity::class.java)) }
-        tvSeeAll.setOnClickListener { startActivity(Intent(this, BestSellerActivity::class.java)) }
-        tvSeeAllArrivals.setOnClickListener { startActivity(Intent(this, BestSellerActivity::class.java)) }
-        btnCart.setOnClickListener { startActivity(Intent(this, MyCartActivity::class.java)) }
-        fabCart.setOnClickListener { startActivity(Intent(this, MyCartActivity::class.java)) }
-        ivFav.setOnClickListener { startActivity(Intent(this, FavouriteActivity::class.java)) }
-        ivNotifications.setOnClickListener { startActivity(Intent(this, NotificationsActivity::class.java)) }
-        ivProfileNav.setOnClickListener { startActivity(Intent(this, ProfileActivity::class.java)) }
-
-        menuAccount.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-            startActivity(Intent(this, AccountSettingsActivity::class.java))
-        }
-        menuHome.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
-        menuCart.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-            startActivity(Intent(this, MyCartActivity::class.java))
-        }
-        menuFavorite.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-            startActivity(Intent(this, FavouriteActivity::class.java))
-        }
-        menuOrders.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-            startActivity(Intent(this, UserOrdersActivity::class.java))
-        }
-        menuNotifications.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
+        
+        // Set click listener for the top notification icon
+        ivNotificationsBell?.setOnClickListener {
             startActivity(Intent(this, NotificationsActivity::class.java))
         }
-        menuAdmin.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-            startActivity(Intent(this, AdminDashboardActivity::class.java))
-        }
-        menuSignOut.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-            sharedPref.edit().remove("userId").apply()
-            val intent = Intent(this, SignInActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    }
+
+    private fun loadUserData() {
+        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val userId = sharedPref.getString("userId", null) ?: return
+
+        FirebaseDatabase.getInstance().getReference("users").child(userId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.getValue(User::class.java)
+                    user?.email?.let { email ->
+                        val displayName = email.substringBefore("@")
+                        tvProfileName.text = displayName
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("HomeActivity", "Failed to load user data", error.toException())
+                }
+            })
+    }
+
+    private fun setupManualProducts() {
+        setupClick(R.id.shoe_card_1, "1", R.id.tvShoe1, R.id.tvPrice1)
+        setupClick(R.id.shoe_card_2, "2", R.id.tvShoe2, R.id.tvPrice2)
+        setupClick(R.id.shoe_card_3, "3", R.id.tvShoe3, R.id.tvPrice3)
+        setupClick(R.id.shoe_card_4, "4", R.id.tvShoe4, R.id.tvPrice4)
+        setupClick(R.id.popular_shoe_1, "5", R.id.tvPopular1, R.id.tvPricePopular1)
+        setupClick(R.id.popular_shoe_2, "6", R.id.tvPopular2, R.id.tvPricePopular2)
+    }
+
+    private fun setupClick(cardId: Int, productId: String, nameId: Int, priceId: Int) {
+        val card = findViewById<View>(cardId) ?: return
+        val nameView = findViewById<TextView>(nameId)
+        val priceView = findViewById<TextView>(priceId)
+
+        card.setOnClickListener {
+            val intent = Intent(this, ProductDetailsActivity::class.java)
+            intent.putExtra("productId", productId)
+            intent.putExtra("productName", nameView?.text.toString())
+            intent.putExtra("productPrice", priceView?.text.toString().replace("₹", ""))
+            intent.putExtra("isManual", true)
             startActivity(intent)
         }
     }
 
+    private fun setupDrawerAndNav(drawerLayout: DrawerLayout) {
+        // Bottom nav views
+        val bottomNav = findViewById<View>(R.id.bottomNavInclude)
+        val ivHome = bottomNav.findViewById<ImageView>(R.id.ivHome)
+        val ivFav = bottomNav.findViewById<ImageView>(R.id.ivFav)
+        val fabCart = bottomNav.findViewById<FloatingActionButton>(R.id.fabCart)
+        val ivNotificationsBottom = bottomNav.findViewById<ImageView>(R.id.ivNotifications)
+        val ivProfileNav = bottomNav.findViewById<ImageView>(R.id.ivProfileNav)
+
+        ivHome.setColorFilter(ContextCompat.getColor(this, R.color.primary_blue))
+
+        findViewById<TextView>(R.id.menu_home).setOnClickListener {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        findViewById<TextView>(R.id.menu_account).setOnClickListener {
+            startActivity(Intent(this, AccountSettingsActivity::class.java))
+        }
+        findViewById<TextView>(R.id.menu_favorite).setOnClickListener {
+            startActivity(Intent(this, FavouriteActivity::class.java))
+        }
+        findViewById<TextView>(R.id.menu_cart).setOnClickListener {
+            startActivity(Intent(this, MyCartActivity::class.java))
+        }
+        findViewById<TextView>(R.id.menu_orders).setOnClickListener {
+            startActivity(Intent(this, UserOrdersActivity::class.java))
+        }
+        findViewById<TextView>(R.id.menu_notifications).setOnClickListener {
+            startActivity(Intent(this, NotificationsActivity::class.java))
+        }
+        findViewById<TextView>(R.id.menu_signout).setOnClickListener {
+            getSharedPreferences("UserPrefs", Context.MODE_PRIVATE).edit {
+                clear()
+            }
+            startActivity(Intent(this, SignInActivity::class.java))
+            finishAffinity()
+        }
+
+        ivFav.setOnClickListener { startActivity(Intent(this, FavouriteActivity::class.java)) }
+        fabCart.setOnClickListener { startActivity(Intent(this, MyCartActivity::class.java)) }
+        ivNotificationsBottom.setOnClickListener { startActivity(Intent(this, NotificationsActivity::class.java)) }
+        ivProfileNav.setOnClickListener { startActivity(Intent(this, ProfileActivity::class.java)) }
+    }
+
     private fun getLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100)
             return
         }
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
+        fusedLocationClient?.lastLocation?.addOnSuccessListener { location ->
+            location?.let {
                 val geocoder = Geocoder(this, Locale.getDefault())
-                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                if (addresses != null && addresses.isNotEmpty()) {
-                    val city = addresses[0].locality
-                    val country = addresses[0].countryName
-                    tvLocation.text = "$city, $country"
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    geocoder.getFromLocation(it.latitude, it.longitude, 1) { addresses ->
+                        if (addresses.isNotEmpty()) {
+                            runOnUiThread {
+                                tvLocation.text = getString(R.string.location_format, addresses[0].locality, addresses[0].countryName)
+                            }
+                        }
+                    }
+                } else {
+                    @Suppress("DEPRECATION")
+                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                    if (!addresses.isNullOrEmpty()) {
+                        tvLocation.text = getString(R.string.location_format, addresses[0].locality, addresses[0].countryName)
+                    }
                 }
-            } else {
-                tvLocation.text = "Location not found"
             }
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getLocation()
-        }
-    }
-
-    private fun fetchProducts() {
-        allProducts.clear()
-        allProducts.addAll(ProductRepository.products)
-        filterProducts("All Shoes")
-    }
-
-    private fun filterProducts(category: String) {
-        popularList.clear()
-        arrivalsList.clear()
-        
-        if (category == "All Shoes") {
-            popularList.addAll(allProducts)
-            arrivalsList.addAll(allProducts.reversed())
-        } else {
-            val filtered = allProducts.filter { it.category?.equals(category, ignoreCase = true) == true }
-            popularList.addAll(filtered)
-            arrivalsList.addAll(filtered.reversed())
-        }
-        
-        popularAdapter.updateProducts(popularList)
-        arrivalsAdapter.updateProducts(arrivalsList)
-        
-        if (popularList.isEmpty()) {
-            Toast.makeText(this, "No shoes found for $category", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -5,29 +5,20 @@
     android:layout_width="280dp"
     android:layout_height="match_parent"
     android:background="@color/drawer_background"
-    android:padding="30dp">
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="40dp"
-        android:scaleType="centerCrop"
-        android:src="@android:drawable/ic_menu_gallery"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/CircleImage" />
+    android:padding="30dp"
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/tvHey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:text="Hey, 👋"
         android:textColor="@color/text_grey"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivProfile" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvProfileName"

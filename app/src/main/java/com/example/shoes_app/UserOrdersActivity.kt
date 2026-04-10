@@ -23,19 +23,33 @@ class UserOrdersActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.rvUserOrders)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Using OrderAdapter with a no-op click since users don't update status
-        adapter = OrderAdapter(orderList) {}
+        database = FirebaseDatabase.getInstance().getReference("orders")
+
+        // Allow user to mark order as Delivered
+        adapter = OrderAdapter(orderList) { order ->
+            updateOrderStatusToDelivered(order)
+        }
         recyclerView.adapter = adapter
 
         val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val userId = sharedPref.getString("userId", null)
 
         if (userId != null) {
-            database = FirebaseDatabase.getInstance().getReference("orders")
             fetchUserOrders(userId)
         } else {
             finish()
         }
+    }
+
+    private fun updateOrderStatusToDelivered(order: Order) {
+        val orderId = order.orderId ?: return
+        database.child(orderId).child("status").setValue("Delivered")
+            .addOnSuccessListener {
+                Toast.makeText(this, "Order marked as Delivered", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to update status", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun fetchUserOrders(userId: String) {

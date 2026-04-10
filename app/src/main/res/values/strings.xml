@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Shoes_app</string>
+    <string name="default_location">New York, NY</string>
+    <string name="location_format">%1$s, %2$s</string>
 </resources>

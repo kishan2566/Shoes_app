@@ -94,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="$40.90"
+                    android:text="₹40.90"
                     android:textColor="@color/text_dark"
                     android:textSize="16sp" />
             </RelativeLayout>

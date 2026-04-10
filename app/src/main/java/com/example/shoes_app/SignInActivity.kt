@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -17,60 +19,90 @@ import com.google.firebase.database.ValueEventListener
 
 class SignInActivity : AppCompatActivity() {
     private var isPasswordVisible = false
-    private var isLoading = true
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var splashProgressBar: ProgressBar
+    private lateinit var loginScrollView: View
+    private lateinit var splashContainer: View
+    private var isTaskCompleted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 1. Initialize SplashScreen (MUST be before super.onCreate)
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-
-        sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-
-        // Keep the splash screen on screen until we check the login status
-        splashScreen.setKeepOnScreenCondition { isLoading }
-
-        // Check login status
-        val savedUserId = sharedPref.getString("userId", null)
         
-        if (savedUserId != null) {
-            checkUserStatusAndRedirect(savedUserId)
-        } else {
-            // No saved user, we can stop showing splash and show login
-            isLoading = false
-            setupLoginUI()
-        }
+        // 2. Set the content view
+        setContentView(R.layout.activity_sign_in)
+
+        // 3. Initialize Views
+        sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        splashProgressBar = findViewById(R.id.splashProgressBar)
+        loginScrollView = findViewById(R.id.loginScrollView)
+        splashContainer = findViewById(R.id.splashContainer)
+
+        // Ensure custom splash is visible and login is hidden
+        splashContainer.visibility = View.VISIBLE
+        loginScrollView.visibility = View.GONE
+
+        // 4. Start Auth Check
+        checkAuthAndNavigate()
     }
 
-    private fun checkUserStatusAndRedirect(userId: String) {
-        val database = FirebaseDatabase.getInstance()
-        database.getReference("users").child(userId)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
+    private fun checkAuthAndNavigate() {
+        val savedUserId = sharedPref.getString("userId", null)
+        
+        if (!savedUserId.isNullOrEmpty()) {
+            // Check Firebase status
+            val database = FirebaseDatabase.getInstance().getReference("users").child(savedUserId)
+            database.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    if (isFinishing || isDestroyed) return
                     val user = snapshot.getValue(User::class.java)
                     if (user != null) {
-                        val intent = if (user.isAdmin || user.email == "admin@gmail.com") {
-                            Intent(this@SignInActivity, AdminDashboardActivity::class.java)
-                        } else {
-                            Intent(this@SignInActivity, HomeActivity::class.java)
-                        }
-                        startActivity(intent)
-                        finish()
+                        isTaskCompleted = true
+                        navigateToDashboard(user)
                     } else {
-                        // User data not found, show login
-                        isLoading = false
-                        setupLoginUI()
+                        proceedToLogin()
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    isLoading = false
-                    setupLoginUI()
+                    proceedToLogin()
                 }
             })
+            
+            // Failsafe: timeout after 5 seconds
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (!isTaskCompleted && !isFinishing) {
+                    proceedToLogin()
+                }
+            }, 5000)
+            
+        } else {
+            // No saved user, show splash for 1.5s then show login
+            Handler(Looper.getMainLooper()).postDelayed({
+                proceedToLogin()
+            }, 1500)
+        }
     }
 
-    private fun setupLoginUI() {
-        setContentView(R.layout.activity_sign_in)
+    private fun navigateToDashboard(user: User) {
+        val intent = if (user.isAdmin || user.email == "admin@gmail.com") {
+            Intent(this, AdminDashboardActivity::class.java)
+        } else {
+            Intent(this, HomeActivity::class.java)
+        }
+        startActivity(intent)
+        finish()
+    }
 
+    private fun proceedToLogin() {
+        if (isFinishing || isDestroyed) return
+        isTaskCompleted = true
+        splashContainer.visibility = View.GONE
+        loginScrollView.visibility = View.VISIBLE
+        setupLoginListeners()
+    }
+
+    private fun setupLoginListeners() {
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val ivPasswordToggle = findViewById<ImageView>(R.id.ivPasswordToggle)
@@ -99,48 +131,35 @@ class SignInActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            btnSignIn.isEnabled = false
-            btnSignIn.text = "Signing in..."
+            setLoadingState(true)
 
-            val database = FirebaseDatabase.getInstance()
-            val usersRef = database.getReference("users")
-
-            usersRef.orderByChild("email").equalTo(email)
+            FirebaseDatabase.getInstance().getReference("users")
+                .orderByChild("email").equalTo(email)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        btnSignIn.isEnabled = true
-                        btnSignIn.text = "Sign In"
-                        
                         if (snapshot.exists()) {
                             var loggedIn = false
                             for (userSnap in snapshot.children) {
                                 val user = userSnap.getValue(User::class.java)
                                 if (user?.password == password) {
-                                    val userId = userSnap.key
-                                    sharedPref.edit().putString("userId", userId).apply()
-
-                                    val intent = if (user?.isAdmin == true || email == "admin@gmail.com") {
-                                        Intent(this@SignInActivity, AdminDashboardActivity::class.java)
-                                    } else {
-                                        Intent(this@SignInActivity, HomeActivity::class.java)
-                                    }
-                                    startActivity(intent)
-                                    finish()
+                                    sharedPref.edit().putString("userId", userSnap.key).apply()
+                                    if (user != null) navigateToDashboard(user)
                                     loggedIn = true
                                     break
                                 }
                             }
                             if (!loggedIn) {
+                                setLoadingState(false)
                                 Toast.makeText(this@SignInActivity, "Invalid password", Toast.LENGTH_SHORT).show()
                             }
                         } else {
+                            setLoadingState(false)
                             Toast.makeText(this@SignInActivity, "No account found", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        btnSignIn.isEnabled = true
-                        btnSignIn.text = "Sign In"
+                        setLoadingState(false)
                         Toast.makeText(this@SignInActivity, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
@@ -152,6 +171,17 @@ class SignInActivity : AppCompatActivity() {
 
         tvFooter.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
+        }
+    }
+
+    private fun setLoadingState(loading: Boolean) {
+        val btnSignIn = findViewById<Button>(R.id.btnSignIn)
+        if (loading) {
+            btnSignIn.isEnabled = false
+            btnSignIn.text = "Signing in..."
+        } else {
+            btnSignIn.isEnabled = true
+            btnSignIn.text = "Sign In"
         }
     }
 }

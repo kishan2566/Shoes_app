@@ -11,6 +11,11 @@
     <color name="light_grey">#E9EDEF</color>
     <color name="drawer_background">#1A2530</color>
     <color name="text_hint">#565454</color>
+    
+    <!-- New design colors -->
+    <color name="home_background">#F8F9FA</color>
+    <color name="purple_background">#67A0E1</color>
+    
     <!-- Admin Dashboard Colors -->
     <color name="admin_primary">#9C27B0</color>
     <color name="admin_revenue_bg">#F3E5F5</color>

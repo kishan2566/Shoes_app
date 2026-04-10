@@ -6,314 +6,292 @@
     android:layout_height="match_parent"
     android:background="@color/background_light">
 
-    <!-- Header -->
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/back_button_bg"
-        android:src="@drawable/ic_back_chevron"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Men's Shoes"
-        android:textColor="@color/text_dark"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/btnBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/btnBack" />
-
-    <ImageButton
-        android:id="@+id/btnFavorite"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/back_button_bg"
-        android:src="@drawable/ic_heart"
-        app:layout_constraintEnd_toStartOf="@id/btnCart"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btnCart"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/back_button_bg"
-        android:src="@drawable/ic_bag"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
-
-    <!-- Product Image Section -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/imageSection"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/btnBack">
-
-        <ImageView
-            android:id="@+id/ivProduct"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:scaleType="centerInside"
-            android:src="@android:drawable/ic_menu_report_image"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Ellipse/Shadow decoration placeholder -->
-        <View
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:background="@drawable/back_button_bg"
-            android:alpha="0.2"
-            app:layout_constraintBottom_toBottomOf="@id/ivProduct"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageButton
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="@drawable/category_bg_selected"
-            android:src="@android:drawable/ic_media_play"
-            android:rotation="180"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:tint="@color/white" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Details Card -->
-    <androidx.cardview.widget.CardView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="-20dp"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageSection">
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="20dp">
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp">
 
-            <TextView
-                android:id="@+id/tvBestSeller"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BEST SELLER"
-                android:textColor="@color/primary_blue"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvProductName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Nike Air Jordan"
-                android:textColor="@color/text_dark"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvBestSeller" />
-
-            <TextView
-                android:id="@+id/tvProductPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="967.800"
-                android:textColor="@color/text_dark"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvProductName" />
-
-            <TextView
-                android:id="@+id/tvDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <!-- Header -->
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
-                android:text="Air Jordan is an American brand of basketball shoes athletic, casual, and style clothing produced by Nike...."
-                android:textColor="@color/text_grey"
-                android:textSize="14sp"
+                android:background="@drawable/back_button_bg"
+                android:src="@drawable/ic_back_chevron"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Men's Shoes"
+                android:textColor="@color/text_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/btnBack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvProductPrice" />
+                app:layout_constraintTop_toTopOf="@id/btnBack" />
 
-            <TextView
-                android:id="@+id/tvGalleryLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Gallery"
-                android:textColor="@color/text_dark"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+            <ImageButton
+                android:id="@+id/btnFavorite"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/back_button_bg"
+                android:src="@drawable/ic_heart"
+                app:layout_constraintEnd_toStartOf="@id/btnCart"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/galleryLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvGalleryLabel">
+            <ImageButton
+                android:id="@+id/btnCart"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/back_button_bg"
+                android:src="@drawable/ic_bag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black" />
 
-                <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:background="@drawable/edit_text_bg"
-                    android:padding="8dp"
-                    android:src="@android:drawable/ic_menu_report_image" />
+            <!-- Product Image Section - Using PhotoView for Zoom functionality -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/imageSection"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/btnBack">
 
-                <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/edit_text_bg"
-                    android:padding="8dp"
-                    android:src="@android:drawable/ic_menu_report_image" />
+                <com.github.chrisbanes.photoview.PhotoView
+                    android:id="@+id/ivProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:src="@android:drawable/ic_menu_report_image"
+                    android:padding="0dp"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/edit_text_bg"
-                    android:padding="8dp"
-                    android:src="@android:drawable/ic_menu_report_image" />
-            </LinearLayout>
+                <View
+                    android:layout_width="250dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/back_button_bg"
+                    android:alpha="0.1"
+                    app:layout_constraintBottom_toBottomOf="@id/ivProduct"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginBottom="20dp"/>
 
-            <TextView
-                android:id="@+id/tvSizeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Size"
-                android:textColor="@color/text_dark"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/galleryLayout" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EU  US  UK"
-                android:textColor="@color/text_grey"
-                app:layout_constraintBottom_toBottomOf="@id/tvSizeLabel"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/sizeLayout"
+            <!-- Details Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/tvSizeLabel">
+                android:layout_marginTop="-30dp"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="0dp"
+                app:layout_constraintTop_toBottomOf="@id/imageSection">
 
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:background="@drawable/size_bg_unselected"
-                    android:gravity="center"
-                    android:text="38"
-                    android:textColor="@color/text_grey" />
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/size_bg_unselected"
-                    android:gravity="center"
-                    android:text="39"
-                    android:textColor="@color/text_grey" />
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/size_bg_selected"
-                    android:gravity="center"
-                    android:text="40"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/size_bg_unselected"
-                    android:gravity="center"
-                    android:text="41"
-                    android:textColor="@color/text_grey" />
-
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/size_bg_unselected"
-                    android:gravity="center"
-                    android:text="42"
-                    android:textColor="@color/text_grey" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:padding="20dp">
 
                     <TextView
+                        android:id="@+id/tvProductName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Price"
-                        android:textColor="@color/text_grey" />
+                        android:text="Nike Air Jordan"
+                        android:textColor="@color/text_dark"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tvProductPriceBottom"
+                        android:id="@+id/tvProductPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="849.69"
+                        android:layout_marginTop="8dp"
+                        android:text="₹967.800"
                         android:textColor="@color/text_dark"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvProductName" />
 
-                <Button
-                    android:id="@+id/btnAddToCart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="54dp"
-                    android:background="@drawable/button_primary_bg"
-                    android:paddingHorizontal="30dp"
-                    android:text="Add To Cart"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    app:backgroundTint="@null" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Air Jordan is an American brand of basketball shoes athletic, casual, and style clothing produced by Nike...."
+                        android:textColor="@color/text_grey"
+                        android:textSize="14sp"
+                        android:lineHeight="22sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvProductPrice" />
 
+                    <TextView
+                        android:id="@+id/tvGalleryLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Gallery"
+                        android:textColor="@color/text_dark"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+
+                    <HorizontalScrollView
+                        android:id="@+id/galleryScroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        app:layout_constraintTop_toBottomOf="@id/tvGalleryLabel">
+
+                        <LinearLayout
+                            android:id="@+id/galleryLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
+                            <!-- Dynamic images here -->
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:id="@+id/tvSizeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Size"
+                        android:textColor="@color/text_dark"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/galleryScroll" />
+
+                    <LinearLayout
+                        android:id="@+id/sizeLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@id/tvSizeLabel">
+
+                        <TextView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/size_bg_unselected"
+                            android:gravity="center"
+                            android:text="38"
+                            android:textColor="@color/text_grey" />
+
+                        <TextView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/size_bg_unselected"
+                            android:gravity="center"
+                            android:text="39"
+                            android:textColor="@color/text_grey" />
+
+                        <TextView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/size_bg_selected"
+                            android:gravity="center"
+                            android:text="40"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/size_bg_unselected"
+                            android:gravity="center"
+                            android:text="41"
+                            android:textColor="@color/text_grey" />
+
+                        <TextView
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@drawable/size_bg_unselected"
+                            android:gravity="center"
+                            android:text="42"
+                            android:textColor="@color/text_grey" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Fixed Bottom Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:id="@+id/priceContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price"
+                android:textColor="@color/text_grey" />
+
+            <TextView
+                android:id="@+id/tvProductPriceBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹849.69"
+                android:textColor="@color/text_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnAddToCart"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/button_primary_bg"
+            android:text="Add To Cart"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/priceContainer"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

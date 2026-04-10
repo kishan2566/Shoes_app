@@ -7,189 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <!-- Main Content -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_light">
+        android:background="@color/home_background">
 
-        <!-- Header -->
-        <ImageButton
-            android:id="@+id/btnMenu"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/back_button_bg"
-            android:src="@drawable/ic_menu_hamburger"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@id/btnMenu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/btnMenu">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Store location"
-                android:textColor="@color/text_grey"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tvLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@android:drawable/ic_menu_mylocation"
-                android:drawablePadding="4dp"
-                android:text="Locating..."
-                android:textColor="@color/text_dark"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:drawableTint="@color/accent_red" />
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/btnCart"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/back_button_bg"
-            android:src="@drawable/ic_bag"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
-
-        <!-- Scrollable Content -->
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintBottom_toTopOf="@id/bottomNavInclude"
-            app:layout_constraintTop_toBottomOf="@id/btnMenu">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- App Title -->
-                <TextView
-                    android:id="@+id/tvAppTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="Shoes Selling"
-                    android:textColor="@color/text_dark"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
-
-                <!-- Search Bar -->
-                <EditText
-                    android:id="@+id/etSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:background="@drawable/search_bg"
-                    android:drawableStart="@android:drawable/ic_menu_search"
-                    android:drawablePadding="12dp"
-                    android:focusable="false"
-                    android:hint="Looking for shoes"
-                    android:paddingHorizontal="16dp" />
-
-                <!-- Categories -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvCategories"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="20dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_category" />
-
-                <!-- Popular Shoes Header -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="24dp">
-
-                    <TextView
-                        android:id="@+id/tvPopularHeader"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Popular Shoes"
-                        android:textColor="@color/text_dark"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvSeeAll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:text="See all"
-                        android:textColor="@color/primary_blue" />
-                </RelativeLayout>
-
-                <!-- Popular Shoes RecyclerView -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvPopularShoes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:clipToPadding="false"
-                    android:paddingHorizontal="20dp" />
-
-                <!-- New Arrivals -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="24dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="New Arrivals"
-                        android:textColor="@color/text_dark"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvSeeAllArrivals"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:text="See all"
-                        android:textColor="@color/primary_blue" />
-                </RelativeLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvNewArrivals"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:clipToPadding="false"
-                    android:paddingHorizontal="20dp" />
-
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-
-        <!-- Reusable Bottom Nav -->
         <include
             android:id="@+id/bottomNavInclude"
             layout="@layout/bottom_nav"
@@ -197,13 +20,412 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavInclude"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/headerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/purple_background"
+                    android:paddingBottom="32dp">
+
+                    <ImageButton
+                        android:id="@+id/btnMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_menu_hamburger"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/ivLocationPin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintBottom_toBottomOf="@id/btnMenu"
+                        app:layout_constraintStart_toEndOf="@+id/btnMenu"
+                        app:layout_constraintTop_toTopOf="@+id/btnMenu"
+                        app:srcCompat="@android:drawable/ic_menu_mylocation"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tvLocationLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Location"
+                        android:textColor="@color/white"
+                        app:layout_constraintStart_toEndOf="@+id/ivLocationPin"
+                        app:layout_constraintTop_toTopOf="@+id/ivLocationPin" />
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Rajkot, Gujarat"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/ivLocationPin"
+                        app:layout_constraintTop_toBottomOf="@+id/tvLocationLabel" />
+
+                    <ImageView
+                        android:id="@+id/ivNotificationsTop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_notification"
+                        app:tint="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/tvGreeting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="32dp"
+                        android:text="Hello! 👋"
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
+
+                    <TextView
+                        android:id="@+id/tvPrompt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Which shoes do you need today?"
+                        android:textColor="@color/white"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvGreeting" />
+
+                    <EditText
+                        android:id="@+id/etSearch"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/search_bg"
+                        android:drawableStart="@android:drawable/ic_menu_search"
+                        android:drawablePadding="8dp"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:hint="Search for shoes"
+                        android:inputType="textPersonName"
+                        android:padding="12dp"
+                        android:textColorHint="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvPrompt" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Our Collection"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <GridLayout
+                    android:id="@+id/shoes_grid_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:columnCount="2">
+
+                    <!-- Shoe Item 1 -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/shoe_card_1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:id="@+id/ivShoe1"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/ic_launcher_foreground" />
+                            <TextView
+                                android:id="@+id/tvShoe1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:padding="8dp"
+                                android:text="Nike Air Jordan 1"
+                                android:textColor="@color/black" />
+                            <TextView
+                                android:id="@+id/tvPrice1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:paddingBottom="8dp"
+                                android:text="₹12000.0"
+                                android:textColor="@color/primary_blue"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Shoe Item 2 -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/shoe_card_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:id="@+id/ivShoe2"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/shoes1" />
+                            <TextView
+                                android:id="@+id/tvShoe2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:padding="8dp"
+                                android:text="Adidas Ultraboost"
+                                android:textColor="@color/black" />
+                            <TextView
+                                android:id="@+id/tvPrice2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:paddingBottom="8dp"
+                                android:text="₹15000.0"
+                                android:textColor="@color/primary_blue"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Shoe Item 3 -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/shoe_card_3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:id="@+id/ivShoe3"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/shoes2" />
+                            <TextView
+                                android:id="@+id/tvShoe3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:padding="8dp"
+                                android:text="Puma RS-X"
+                                android:textColor="@color/black" />
+                            <TextView
+                                android:id="@+id/tvPrice3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:paddingBottom="8dp"
+                                android:text="₹8000.0"
+                                android:textColor="@color/primary_blue"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Shoe Item 4 -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/shoe_card_4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="8dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:id="@+id/ivShoe4"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/shoes3" />
+                            <TextView
+                                android:id="@+id/tvShoe4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:padding="8dp"
+                                android:text="Jordan Retro 4"
+                                android:textColor="@color/black" />
+                            <TextView
+                                android:id="@+id/tvPrice4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:paddingBottom="8dp"
+                                android:text="₹18000.0"
+                                android:textColor="@color/primary_blue"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </GridLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Popular Shoes"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Popular Shoe 1 -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/popular_shoe_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardCornerRadius="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+                        <ImageView
+                            android:id="@+id/ivPopular1"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/shoes4" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tvPopular1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nike Air Max 270"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/tvPricePopular1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="₹13500.0"
+                                android:textColor="@color/primary_blue"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Popular Shoe 2 -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/popular_shoe_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="32dp"
+                    app:cardCornerRadius="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+                        <ImageView
+                            android:id="@+id/ivPopular2"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_launcher_foreground" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tvPopular2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Adidas NMD_R1"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/tvPricePopular2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="₹14000.0"
+                                android:textColor="@color/primary_blue"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </ScrollView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Side Menu -->
-    <include
-        layout="@layout/drawer_content"
+    <!-- Sidebar Inclusion -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start" />
+        android:layout_gravity="start"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
+        <include layout="@layout/drawer_content" />
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

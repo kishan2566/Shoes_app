@@ -5,14 +5,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.database.FirebaseDatabase
 
 class FavouriteProductAdapter(
     private var products: MutableList<Product>,
@@ -25,13 +23,14 @@ class FavouriteProductAdapter(
         val tvName: TextView = view.findViewById(R.id.tvProductName)
         val tvCategory: TextView = view.findViewById(R.id.tvCategory)
         val tvPrice: TextView = view.findViewById(R.id.tvProductPrice)
-        val btnAddToCart: Button = view.findViewById(R.id.btnAddToCart)
+        val btnAddToCart: ImageButton = view.findViewById(R.id.btnAddToCart)
         val btnRemoveFav: ImageButton = view.findViewById(R.id.btnRemoveFav)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavViewHolder {
+        // Use the new grid-style layout
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_favourite, parent, false)
+            .inflate(R.layout.item_fav_grid, parent, false)
         return FavViewHolder(view)
     }
 
@@ -39,39 +38,60 @@ class FavouriteProductAdapter(
         val product = products[position]
 
         holder.tvName.text = product.name
-        holder.tvCategory.text = product.category
+        holder.tvCategory.text = product.category ?: "BEST SELLER"
         holder.tvPrice.text = "₹${product.price}"
 
         val imageUrl = product.imageUrl
             ?: if (!product.imageUrls.isNullOrEmpty()) product.imageUrls!![0] else ""
 
-        Glide.with(context)
-            .load(imageUrl)
-            .placeholder(android.R.drawable.ic_menu_report_image)
-            .into(holder.ivProduct)
+        loadImage(imageUrl, holder.ivProduct)
 
-        // Open product details on item click
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ProductDetailsActivity::class.java)
             intent.putExtra("productId", product.id)
             context.startActivity(intent)
         }
 
-        // Remove from favourites (SharedPreferences)
         holder.btnRemoveFav.setOnClickListener {
             val productId = product.id ?: return@setOnClickListener
             removeFavourite(productId)
             val pos = holder.adapterPosition
-            if (pos != RecyclerView.NO_ID.toInt()) {
+            if (pos != RecyclerView.NO_POSITION) {
                 products.removeAt(pos)
                 notifyItemRemoved(pos)
                 Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Add to cart (Firebase write is still OK — user said reads/writes fail, but we keep cart write)
         holder.btnAddToCart.setOnClickListener {
-            addToCart(product)
+            val intent = Intent(context, ProductDetailsActivity::class.java)
+            intent.putExtra("productId", product.id)
+            context.startActivity(intent)
+        }
+    }
+
+    private fun loadImage(url: String, imageView: ImageView) {
+        if (url.isEmpty()) {
+            imageView.setImageResource(R.mipmap.ic_launcher_foreground)
+            return
+        }
+
+        if (url.startsWith("http")) {
+            Glide.with(context)
+                .load(url)
+                .placeholder(android.R.drawable.ic_menu_report_image)
+                .into(imageView)
+        } else {
+            var resId = context.resources.getIdentifier(url, "mipmap", context.packageName)
+            if (resId == 0) {
+                resId = context.resources.getIdentifier(url, "drawable", context.packageName)
+            }
+
+            if (resId != 0) {
+                Glide.with(context).load(resId).into(imageView)
+            } else {
+                imageView.setImageResource(R.mipmap.ic_launcher_foreground)
+            }
         }
     }
 
@@ -80,31 +100,6 @@ class FavouriteProductAdapter(
         val favIds = favPrefs.getStringSet("fav_ids", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
         favIds.remove(productId)
         favPrefs.edit().putStringSet("fav_ids", favIds).apply()
-    }
-
-    private fun addToCart(product: Product) {
-        if (userId.isEmpty()) {
-            Toast.makeText(context, "Please sign in first", Toast.LENGTH_SHORT).show()
-            return
-        }
-        val database = FirebaseDatabase.getInstance().getReference("carts").child(userId)
-        val cartItemId = product.id ?: return
-
-        val cartItem = HashMap<String, Any>()
-        cartItem["id"] = product.id ?: ""
-        cartItem["name"] = product.name ?: ""
-        cartItem["price"] = product.price ?: 0.0
-        cartItem["imageUrl"] = product.imageUrl ?: ""
-        cartItem["category"] = product.category ?: ""
-        cartItem["quantity"] = 1
-
-        database.child(cartItemId).setValue(cartItem)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "Failed to add to cart", Toast.LENGTH_SHORT).show()
-            }
     }
 
     override fun getItemCount() = products.size
